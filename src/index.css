@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/* ===========================
+   THEME COLORS (HSL vars)
+   =========================== */
+@layer base {
+  :root {
+    --bg: 0 0% 100%;
+    --fg: 222 22% 15%;
+    --primary: 221 83% 53%;
+    --danger: 0 84% 60%;
+    --gold: 46 85% 52%;
+    --muted: 220 9% 46%;
+  }
+  .dark {
+    --bg: 222 14% 10%;
+    --fg: 210 40% 98%;
+    --primary: 221 83% 66%;
+    --danger: 0 84% 66%;
+    --gold: 46 90% 55%;
+    --muted: 220 10% 60%;
+  }
+}
+
+/* Tailwind v4 color tokens */
+@theme {
+  --color-bg: hsl(var(--bg));
+  --color-fg: hsl(var(--fg));
+  --color-primary: hsl(var(--primary));
+  --color-danger: hsl(var(--danger));
+  --color-gold: hsl(var(--gold));
+  --color-muted: hsl(var(--muted));
+}
+
+/* Base resets */
+@layer base {
+  html, body, #root { height: 100%; }
+  *:focus-visible { outline: 2px solid hsl(var(--gold)); outline-offset: 2px; }
+
+  body {
+    background-color: hsl(var(--bg));
+    color: hsl(var(--fg));
+  }
+}
+
+/* ===========================
+   HERO BACKGROUND (image + tint)
+   =========================== */
+@layer base {
+  :root {
+    --hero-img: url('/images/hero-light.jpg'); /* light theme */
+    --hero-opacity: 0.5;
+  }
+  .dark {
+    --hero-img: url('/images/hero-dark.jpg');  /* dark theme */
+    --hero-opacity: 0.10;
+  }
+}
+
+@layer utilities {
+  .hero-bg {
+    background-image: var(--hero-img);
+    background-size: cover;
+    background-position: center;
+    opacity: var(--hero-opacity);
+  }
+}
+
+/* Extra variables for other hero styles (optional) */
+@layer base {
+  /* Put these files into /public/images:
+     - hero-light.jpg
+     - hero-dark.jpg
+     You can reuse your existing hero image by copying/renaming. */
+  :root {
+    --hero-url: url('/images/hero-light.jpg');
+    --hero-tint: rgba(255, 255, 255, 0.28);
+  }
+  .dark {
+    --hero-url: url('/images/hero-dark.jpg');
+    --hero-tint: rgba(0, 0, 0, 0.50);
+  }
+}
+
+/* ===========================
+   GLOBAL RUSSIAN-FLAG VIGNETTE (always behind content)
+   Uses body::before + #root stacking context
+   =========================== */
+@layer base {
+  /* Lift the app above the vignette */
+  #root {
+    position: relative;
+    isolation: isolate; /* own stacking context for app content */
+    z-index: 1;
+  }
+
+  /* Full-page vignette behind everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    /* Flag spots: white top, blue sides center, red sides bottom + soft shadow,
+       PLUS bottom-most solid layer with page background color.
+       No mix-blend-mode → does not tint UI, only acts as wallpaper. */
+
+    filter: saturate(1.15);
+    opacity: 1;
+
+    /* Circular mask: weaker in center, stronger at all edges */
+    --edge-mask: radial-gradient(
+      circle at 50% 50%,
+      rgba(0,0,0,0.10) 0%,
+      rgba(0,0,0,0.25) 32%,
+      rgba(0,0,0,0.70) 68%,
+      rgba(0,0,0,0.98) 100%
+    );
+    -webkit-mask-image: var(--edge-mask);
+    mask-image: var(--edge-mask);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  /* Dark theme: softer colors; also include base dark paper as bottom layer.
+     No mix-blend-mode → UI not tinted. */
+  .dark body::before {
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,0.16), rgba(255,255,255,0) 60%);
+    background-blend-mode: normal, normal, normal, normal, normal;
+
+    filter: saturate(1.1);
+    opacity: 0.95;
+
+    --edge-mask: radial-gradient(
+      circle at 50% 50%,
+      rgba(0,0,0,0.18) 0%,
+      rgba(0,0,0,0.40) 34%,
+      rgba(0,0,0,0.80) 70%,
+      rgba(0,0,0,0.99) 100%
+    );
+    -webkit-mask-image: var(--edge-mask);
+    mask-image: var(--edge-mask);
+  }
+}
+
+/* ===========================
+   UTILITIES
+   =========================== */
+@layer utilities {
+  /* Hide scrollbars (used in photo ribbon) */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}

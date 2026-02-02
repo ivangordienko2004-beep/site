@@ -1,0 +1,25 @@
+{
+  "nav": { "home": "Home", "projects": "Projects", "about": "About", "blog": "Blog", "contacts": "Contacts" },
+  "hero": {
+    "name": "Anastasia Frantseva",
+    "role": "Singer, soloist of the project ‘SVO i pesni’",
+    "ctaAbout": "About",
+    "ctaProjects": "View Projects",
+    "ctaResume": "Download CV"
+  },
+  "about": {
+    "title": "About me",
+    "short": "Since the age of 16, I have travelled to the operation zone with a humanitarian mission and concerts for service members.",
+    "education": "Education",
+    "awards": "Awards",
+    "media": "Media & Projects",
+    "contacts": "Contacts"
+  },
+  "home": {
+    "features": {
+      "services": { "title": "Services", "desc": "Concerts, official events" },
+      "values": { "title": "Values", "desc": "Memory, respect, service" },
+      "reliability": { "title": "Reliability", "desc": "Precise timing and repertoire" }
+    }
+  }
+}
